@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIPAT - Peminjaman Alat Bengkel TI</title>
+  <style>
+    :root{
+      --navy:#172554;--blue:#3157d5;--blue2:#496df0;--bg:#f4f6fb;--card:#fff;
+      --text:#172033;--muted:#75809a;--line:#e7eaf2;--green:#13845b;--green-bg:#e7f7ef;
+      --orange:#b96b12;--orange-bg:#fff3df;--red:#c13d4b;--red-bg:#ffebed;
+      --shadow:0 10px 28px rgba(28,42,86,.07);--radius:18px
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,input,select,textarea{font:inherit} button{cursor:pointer}
+    .app{min-height:100vh;display:flex}
+    .sidebar{width:250px;background:linear-gradient(180deg,#172554,#1e3475);color:#fff;padding:25px 16px;display:flex;flex-direction:column;flex-shrink:0}
+    .brand{display:flex;align-items:center;gap:12px;padding:4px 10px 28px}.brand-mark{width:42px;height:42px;border-radius:14px;background:#fff;color:#2445b8;display:grid;place-items:center;font-size:21px;font-weight:900}.brand strong{font-size:16px;letter-spacing:.3px}.brand small{display:block;color:#b9c7f7;font-size:11px;margin-top:3px}
+    .nav-label{color:#9eafe9;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:12px 12px 9px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#d6defb;text-align:left;padding:12px 13px;border-radius:12px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600;transition:.2s}.nav button:hover,.nav button.active{background:rgba(255,255,255,.14);color:#fff}.nav .ico{width:20px;text-align:center;font-size:17px}.sidebar-bottom{margin-top:auto;padding:18px 12px 5px;color:#aab8eb;font-size:11px;line-height:1.6}.sidebar-bottom strong{color:#fff;display:block;font-size:12px}
+    .main{flex:1;min-width:0;padding:27px 32px 45px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:27px}.eyebrow{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase}.page-title{font-size:25px;line-height:1.2;margin:5px 0 0;font-weight:800;letter-spacing:-.6px}.top-right{display:flex;align-items:center;gap:12px}.today{font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:10px 13px;border-radius:12px}.avatar{width:39px;height:39px;border-radius:13px;background:#e6ebff;color:#3157d5;display:grid;place-items:center;font-weight:800}
+    .page{display:none}.page.active{display:block}.welcome{background:linear-gradient(110deg,#2444b8,#5272f1);border-radius:22px;padding:25px 28px;color:white;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:0 12px 28px rgba(49,87,213,.2);margin-bottom:22px;overflow:hidden}.welcome h2{font-size:21px;margin:0 0 7px}.welcome p{margin:0;color:#e0e7ff;font-size:13px;max-width:560px;line-height:1.6}.welcome-icon{font-size:60px;opacity:.9;padding:0 18px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 19px;box-shadow:var(--shadow)}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;font-weight:650}.stat-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:17px}.stat-num{font-size:27px;font-weight:800;margin-top:12px;letter-spacing:-.7px}.stat-note{font-size:11px;color:var(--muted);margin-top:4px}.blue{background:#eaf0ff;color:#3157d5}.green{background:var(--green-bg);color:var(--green)}.orange{background:var(--orange-bg);color:var(--orange)}.red{background:var(--red-bg);color:var(--red)}
+    .grid-two{display:grid;grid-template-columns:1.15fr .85fr;gap:17px}.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.panel-head h3{font-size:15px;margin:0;font-weight:800}.sub{font-size:11px;color:var(--muted);margin-top:4px}.text-btn{border:0;background:transparent;color:var(--blue);font-weight:750;font-size:12px;padding:5px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:left;color:#8992a8;font-size:10px;text-transform:uppercase;letter-spacing:.7px;font-weight:800;padding:11px 10px;border-bottom:1px solid var(--line)}td{padding:13px 10px;border-bottom:1px solid #f0f2f7;font-size:12px}tbody tr:last-child td{border-bottom:0}.item-cell{display:flex;align-items:center;gap:10px}.item-icon{width:34px;height:34px;border-radius:11px;background:#eff2ff;display:grid;place-items:center;font-size:17px}.item-name{font-weight:750}.muted{color:var(--muted)}.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:30px;font-size:10px;font-weight:800}.pill.available{background:var(--green-bg);color:var(--green)}.pill.borrowed{background:#eaf0ff;color:#3157d5}.pill.late{background:var(--red-bg);color:var(--red)}.pill.done{background:#eef0f4;color:#667085}.pill.low{background:var(--orange-bg);color:var(--orange)}
+    .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.quick{border:1px solid var(--line);background:#fff;border-radius:14px;padding:15px;text-align:left;transition:.2s}.quick:hover{border-color:#b9c7ff;background:#f9faff;transform:translateY(-1px)}.quick .qico{font-size:21px}.quick strong{display:block;font-size:12px;margin-top:9px}.quick span{display:block;font-size:10px;color:var(--muted);margin-top:4px}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.toolbar-left{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.search{position:relative}.search input{width:245px;padding:10px 12px 10px 35px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none;font-size:12px}.search:before{content:'⌕';position:absolute;left:12px;top:5px;font-size:21px;color:#8992a8}.search input:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:#8da2ff;box-shadow:0 0 0 3px #3157d51a}.select-filter{border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;font-size:12px;color:#536078;outline:none}.btn{border:0;border-radius:11px;padding:10px 14px;font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.2s}.btn-primary{background:var(--blue);color:#fff;box-shadow:0 5px 12px #3157d52b}.btn-primary:hover{background:#2446c2}.btn-light{background:#f1f3f8;color:#46516b}.btn-light:hover{background:#e7eaf2}.btn-danger{background:var(--red-bg);color:var(--red)}.btn-small{padding:7px 10px;font-size:10px;border-radius:8px}.empty{text-align:center;padding:32px 15px;color:var(--muted);font-size:12px}.empty b{display:block;color:#46516b;font-size:13px;margin-bottom:5px}
+    .form-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.form-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}.form-card h3{font-size:16px;margin:0 0 5px}.form-card>p{font-size:11px;color:var(--muted);margin:0 0 20px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:750;color:#536078}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;color:var(--text);font-size:12px;outline:none}.field textarea{min-height:75px;resize:vertical}.hint{font-size:10px;color:var(--muted);line-height:1.5}.form-actions{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}.info-box{background:#f3f6ff;border:1px solid #e2e9ff;padding:15px;border-radius:13px;font-size:11px;line-height:1.65;color:#53618a}.info-box strong{display:block;color:#2945a4;margin-bottom:5px}.notice{padding:12px 14px;border-radius:12px;font-size:11px;line-height:1.55;margin-bottom:14px}.notice.warning{background:var(--orange-bg);color:#89500d}.notice.info{background:#edf2ff;color:#3855b2}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(13,22,48,.48);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal-backdrop.show{display:flex}.modal{width:min(520px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:19px;padding:23px;box-shadow:0 25px 70px #101a3d40}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h3{margin:0;font-size:17px}.close{border:0;background:#f0f2f7;width:32px;height:32px;border-radius:10px;font-size:18px;color:#65708a}.toast{position:fixed;right:22px;bottom:22px;background:#172554;color:#fff;padding:13px 17px;border-radius:12px;box-shadow:var(--shadow);font-size:12px;z-index:50;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateY(0)}.footer-note{font-size:10px;color:var(--muted);margin-top:16px;text-align:center}
+    @media(max-width:1050px){.sidebar{width:215px}.main{padding:23px}.stats{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:760px){.app{display:block}.sidebar{width:100%;padding:12px 13px;display:block}.brand{padding:3px 5px 12px}.brand-mark{width:35px;height:35px}.nav-label,.sidebar-bottom{display:none}.nav{display:flex;overflow:auto;gap:5px;padding-bottom:3px}.nav button{white-space:nowrap;padding:9px 11px;font-size:11px}.nav .ico{font-size:14px;width:auto}.main{padding:19px 14px 35px}.topbar{margin-bottom:19px}.page-title{font-size:21px}.today{display:none}.welcome{padding:20px}.welcome-icon{font-size:42px;padding:0}.stats{gap:10px}.stat{padding:14px}.stat-num{font-size:23px}.grid-two,.form-layout{grid-template-columns:1fr}.panel{padding:15px}.toolbar{align-items:stretch}.toolbar-left{width:100%}.search{flex:1}.search input{width:100%}.toolbar>.btn{width:100%}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+    @media(max-width:390px){.stats{grid-template-columns:1fr 1fr}.stat-top{font-size:10px}.welcome h2{font-size:18px}.welcome p{font-size:11px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">S</div><div><strong>SIPAT Bengkel TI</strong><small>Sistem Peminjaman Alat</small></div></div>
+    <div class="nav-label">MENU UTAMA</div>
+    <nav class="nav" aria-label="Navigasi utama">
+      <button class="active" data-page="dashboard"><span class="ico">▦</span>Dashboard</button>
+      <button data-page="alat"><span class="ico">▣</span>Data Alat</button>
+      <button data-page="pinjam"><span class="ico">⇧</span>Peminjaman</button>
+      <button data-page="transaksi"><span class="ico">⇄</span>Pengembalian</button>
+      <button data-page="laporan"><span class="ico">▤</span>Laporan</button>
+    </nav>
+    <div class="sidebar-bottom"><strong>Panel Petugas Bengkel</strong>Kelola inventaris dan transaksi alat dalam satu aplikasi.<br>Versi 1.0 · Offline</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><div class="eyebrow">Sistem Informasi Bengkel TI</div><h1 class="page-title" id="pageTitle">Dashboard</h1></div>
+      <div class="top-right"><div class="today" id="todayText"></div><div class="avatar">AD</div></div>
+    </header>
+
+    <section class="page active" id="page-dashboard">
+      <div class="welcome"><div><h2>Selamat datang, Petugas Bengkel! 👋</h2><p>Pantau inventaris, catat peminjaman, dan kelola pengembalian alat Bengkel TI dengan lebih mudah dan teratur.</p></div><div class="welcome-icon">🧰</div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top">Total jenis alat <span class="stat-icon blue">▣</span></div><div class="stat-num" id="statJenis">0</div><div class="stat-note">Jenis inventaris terdaftar</div></div>
+        <div class="stat"><div class="stat-top">Unit tersedia <span class="stat-icon green">✓</span></div><div class="stat-num" id="statTersedia">0</div><div class="stat-note">Siap untuk dipinjam</div></div>
+        <div class="stat"><div class="stat-top">Sedang dipinjam <span class="stat-icon orange">⇧</span></div><div class="stat-num" id="statDipinjam">0</div><div class="stat-note">Unit belum dikembalikan</div></div>
+        <div class="stat"><div class="stat-top">Terlambat <span class="stat-icon red">◷</span></div><div class="stat-num" id="statTerlambat">0</div><div class="stat-note">Transaksi melewati tenggat</div></div>
+      </div>
+      <div class="grid-two">
+        <div class="panel"><div class="panel-head"><div><h3>Transaksi Terbaru</h3><div class="sub">Aktivitas peminjaman dan pengembalian terakhir</div></div><button class="text-btn" data-goto="transaksi">Lihat semua →</button></div><div class="table-wrap"><table><thead><tr><th>Peminjam</th><th>Alat</th><th>Tanggal</th><th>Status</th></tr></thead><tbody id="recentRows"></tbody></table></div></div>
+        <div class="panel"><div class="panel-head"><div><h3>Akses Cepat</h3><div class="sub">Pilih aktivitas yang ingin dilakukan</div></div></div><div class="quick-actions"><button class="quick" data-goto="pinjam"><div class="qico">📋</div><strong>Catat Peminjaman</strong><span>Buat transaksi baru</span></button><button class="quick" data-goto="alat"><div class="qico">🧰</div><strong>Kelola Data Alat</strong><span>Tambah atau ubah inventaris</span></button><button class="quick" data-goto="transaksi"><div class="qico">↩️</div><strong>Pengembalian</strong><span>Proses alat kembali</span></button><button class="quick" data-goto="laporan"><div class="qico">📊</div><strong>Lihat Laporan</strong><span>Unduh riwayat transaksi</span></button></div></div>
+      </div>
+      <div class="footer-note">Data contoh dapat diubah melalui menu Data Alat. Data aplikasi tersimpan di browser perangkat ini.</div>
+    </section>
+
+    <section class="page" id="page-alat">
+      <div class="toolbar"><div class="toolbar-left"><div class="search"><input id="searchAlat" placeholder="Cari nama atau kategori alat..." /></div><select class="select-filter" id="filterAlat"><option value="all">Semua status</option><option value="available">Tersedia</option><option value="empty">Stok habis</option></select></div><button class="btn btn-primary" id="addToolBtn">＋ Tambah Alat</button></div>
+      <div class="panel"><div class="panel-head"><div><h3>Daftar Inventaris Alat</h3><div class="sub">Kelola jumlah dan ketersediaan alat Bengkel TI</div></div><span class="pill available" id="countAlat">0 jenis alat</span></div><div class="table-wrap"><table><thead><tr><th>Nama alat</th><th>Kategori</th><th>Total unit</th><th>Tersedia</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="alatRows"></tbody></table></div></div>
+    </section>
+
+    <section class="page" id="page-pinjam">
+      <div class="form-layout">
+        <div class="form-card"><h3>Form Peminjaman Alat</h3><p>Isi data peminjam dan alat yang akan dipinjam.</p>
+          <form id="loanForm"><div class="form-grid">
+            <div class="field full"><label for="borrower">Nama peminjam *</label><input id="borrower" required maxlength="70" placeholder="Masukkan nama lengkap" /></div>
+            <div class="field"><label for="identity">Kelas / NIS / NIP</label><input id="identity" maxlength="40" placeholder="Contoh: XI RPL 2" /></div>
+            <div class="field"><label for="toolSelect">Pilih alat *</label><select id="toolSelect" required></select></div>
+            <div class="field"><label for="loanQty">Jumlah unit *</label><input id="loanQty" type="number" min="1" value="1" required /></div>
+            <div class="field"><label for="loanDate">Tanggal pinjam *</label><input id="loanDate" type="date" required /></div>
+            <div class="field"><label for="dueDate">Batas pengembalian *</label><input id="dueDate" type="date" required /></div>
+            <div class="field full"><label for="loanNote">Keterangan (opsional)</label><textarea id="loanNote" maxlength="200" placeholder="Tujuan peminjaman atau catatan tambahan"></textarea></div>
+          </div><div class="form-actions"><button class="btn btn-primary" type="submit">✓ Simpan Peminjaman</button><button class="btn btn-light" type="reset">Reset Form</button></div></form>
+        </div>
+        <div class="form-card"><h3>Petunjuk Peminjaman</h3><p>Perhatikan ketentuan berikut sebelum menyimpan transaksi.</p><div class="info-box"><strong>Alur peminjaman</strong>1. Masukkan nama peminjam dan identitasnya.<br>2. Pilih alat sesuai stok yang tersedia.<br>3. Tentukan tanggal pinjam dan batas pengembalian.<br>4. Klik Simpan Peminjaman untuk mencatat transaksi.</div><div style="height:12px"></div><div class="notice warning">Pastikan jumlah alat yang dipinjam tidak melebihi stok tersedia. Stok akan berkurang otomatis setelah transaksi disimpan.</div><div class="notice info">Transaksi yang melewati tanggal batas pengembalian akan ditandai sebagai <b>Terlambat</b> secara otomatis.</div></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-transaksi">
+      <div class="toolbar"><div class="toolbar-left"><div class="search"><input id="searchTransaksi" placeholder="Cari nama peminjam atau alat..." /></div><select class="select-filter" id="filterTransaksi"><option value="all">Semua transaksi</option><option value="active">Belum kembali</option><option value="late">Terlambat</option><option value="done">Sudah kembali</option></select></div><button class="btn btn-light" id="refreshTransaksi">↻ Perbarui</button></div>
+      <div class="panel"><div class="panel-head"><div><h3>Data Peminjaman & Pengembalian</h3><div class="sub">Pilih tombol kembalikan untuk menyelesaikan transaksi</div></div></div><div class="table-wrap"><table><thead><tr><th>Peminjam</th><th>Alat</th><th>Jumlah</th><th>Tanggal pinjam</th><th>Batas kembali</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="transactionRows"></tbody></table></div></div>
+    </section>
+
+    <section class="page" id="page-laporan">
+      <div class="toolbar"><div><div class="eyebrow">Rekapitulasi</div><div style="font-size:13px;font-weight:750;margin-top:4px">Laporan transaksi peminjaman alat</div></div><button class="btn btn-primary" id="exportBtn">⇩ Unduh CSV</button></div>
+      <div class="stats"><div class="stat"><div class="stat-top">Total transaksi <span class="stat-icon blue">▤</span></div><div class="stat-num" id="reportTotal">0</div><div class="stat-note">Seluruh transaksi tercatat</div></div><div class="stat"><div class="stat-top">Selesai <span class="stat-icon green">✓</span></div><div class="stat-num" id="reportDone">0</div><div class="stat-note">Sudah dikembalikan</div></div><div class="stat"><div class="stat-top">Aktif <span class="stat-icon orange">⇧</span></div><div class="stat-num" id="reportActive">0</div><div class="stat-note">Belum dikembalikan</div></div><div class="stat"><div class="stat-top">Terlambat <span class="stat-icon red">◷</span></div><div class="stat-num" id="reportLate">0</div><div class="stat-note">Melewati batas kembali</div></div></div>
+      <div class="panel"><div class="panel-head"><div><h3>Riwayat Seluruh Transaksi</h3><div class="sub">Data dapat diunduh dalam format CSV untuk dibuka di Excel</div></div></div><div class="table-wrap"><table><thead><tr><th>No.</th><th>Peminjam</th><th>Identitas</th><th>Alat</th><th>Jumlah</th><th>Tanggal pinjam</th><th>Tanggal kembali</th><th>Status</th></tr></thead><tbody id="reportRows"></tbody></table></div></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="toolModal"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Tambah Data Alat</h3><button class="close" id="closeModal" type="button">×</button></div><form id="toolForm"><input type="hidden" id="editToolId"><div class="form-grid"><div class="field full"><label for="toolName">Nama alat *</label><input id="toolName" required maxlength="70" placeholder="Contoh: Multimeter digital"></div><div class="field"><label for="toolCategory">Kategori *</label><select id="toolCategory" required><option value="Alat ukur">Alat ukur</option><option value="Perkakas jaringan">Perkakas jaringan</option><option value="Komputer">Komputer</option><option value="Periferal">Periferal</option><option value="Lainnya">Lainnya</option></select></div><div class="field"><label for="toolQty">Jumlah unit *</label><input id="toolQty" type="number" min="0" required value="1"></div></div><div class="form-actions"><button class="btn btn-primary" type="submit">Simpan Data</button><button class="btn btn-light" id="cancelModal" type="button">Batal</button></div></form></div></div>
+<div class="modal-backdrop" id="returnModal"><div class="modal"><div class="modal-head"><h3>Konfirmasi Pengembalian</h3><button class="close" id="closeReturnModal" type="button">×</button></div><p id="returnDescription" style="font-size:12px;color:#667085;line-height:1.6"></p><div class="notice info">Pastikan alat sudah diterima dan kondisinya telah diperiksa sebelum menyelesaikan transaksi.</div><div class="form-actions"><button class="btn btn-primary" id="confirmReturn">✓ Ya, Kembalikan</button><button class="btn btn-light" id="cancelReturn">Batal</button></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const STORAGE_KEY = 'sipat_bengkel_ti_v1';
+  const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+  const addDays = (date, n) => { const d = new Date(date+'T12:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); };
+  const fmt = (date) => date ? new Date(date+'T12:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}) : '-';
+  const escapeHTML = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const initialData = {
+    tools:[
+      {id:'A001',name:'Multimeter Digital',category:'Alat ukur',total:8,available:8},
+      {id:'A002',name:'Tang Crimping',category:'Perkakas jaringan',total:10,available:10},
+      {id:'A003',name:'Laptop',category:'Komputer',total:7,available:7},
+      {id:'A004',name:'Kabel LAN',category:'Periferal',total:15,available:15},
+      {id:'A005',name:'Obeng Set',category:'Perkakas jaringan',total:6,available:6}
+    ],transactions:[]
+  };
+  let data;
+  try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || structuredClone(initialData); }
+  catch(e){ data = JSON.parse(JSON.stringify(initialData)); }
+  if(!data.tools || !data.transactions) data = JSON.parse(JSON.stringify(initialData));
+  let selectedReturnId = null, toastTimer;
+  const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const notify = (message) => { const t=$('toast');t.textContent=message;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600); };
+  const getTool = id => data.tools.find(t=>t.id===id);
+  const isLate = tx => !tx.returnedAt && tx.dueDate < todayISO();
+  const statusOf = tx => tx.returnedAt ? 'done' : isLate(tx) ? 'late' : 'active';
+  const statusPill = status => status==='done' ? '<span class="pill done">● Selesai</span>' : status==='late' ? '<span class="pill late">● Terlambat</span>' : '<span class="pill borrowed">● Dipinjam</span>';
+  const toolEmoji = category => category==='Alat ukur'?'📟':category==='Komputer'?'💻':category==='Periferal'?'🔌':category==='Perkakas jaringan'?'🛠️':'🧰';
+
+  function showPage(name){
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));
+    document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+    const titles={dashboard:'Dashboard',alat:'Data Alat',pinjam:'Peminjaman Alat',transaksi:'Pengembalian Alat',laporan:'Laporan'};
+    $('pageTitle').textContent=titles[name]||'Dashboard';
+    if(name==='pinjam') renderLoanOptions();
+    renderAll();
+  }
+  document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+  document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.goto)));
+
+  function renderDashboard(){
+    const total=data.tools.reduce((s,t)=>s+t.total,0),available=data.tools.reduce((s,t)=>s+t.available,0),borrowed=total-available,late=data.transactions.filter(isLate).length;
+    $('statJenis').textContent=data.tools.length;$('statTersedia').textContent=available;$('statDipinjam').textContent=borrowed;$('statTerlambat').textContent=late;
+    const recent=[...data.transactions].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).slice(0,5);
+    $('recentRows').innerHTML=recent.length?recent.map(tx=>`<tr><td><b>${escapeHTML(tx.borrower)}</b><div class="muted">${escapeHTML(tx.identity||'-')}</div></td><td>${escapeHTML(tx.toolName)}</td><td>${fmt(tx.loanDate)}</td><td>${statusPill(statusOf(tx))}</td></tr>`).join(''):'<tr><td colspan="4"><div class="empty"><b>Belum ada transaksi</b>Transaksi terbaru akan muncul di sini.</div></td></tr>';
+  }
+  function renderTools(){
+    const q=$('searchAlat').value.toLowerCase(),filter=$('filterAlat').value;
+    const list=data.tools.filter(t=>(t.name+' '+t.category).toLowerCase().includes(q)&&(filter==='all'||(filter==='available'?t.available>0:t.available===0)));
+    $('countAlat').textContent=data.tools.length+' jenis alat';
+    $('alatRows').innerHTML=list.length?list.map(t=>`<tr><td><div class="item-cell"><div class="item-icon">${toolEmoji(t.category)}</div><div><div class="item-name">${escapeHTML(t.name)}</div><div class="muted">Kode: ${escapeHTML(t.id)}</div></div></div></td><td>${escapeHTML(t.category)}</td><td>${t.total} unit</td><td><b>${t.available}</b> unit</td><td>${t.available>0?'<span class="pill available">● Tersedia</span>':'<span class="pill low">● Stok habis</span>'}</td><td><button class="btn btn-light btn-small" data-edit="${t.id}">Edit</button> <button class="btn btn-danger btn-small" data-delete="${t.id}">Hapus</button></td></tr>`).join(''):'<tr><td colspan="6"><div class="empty"><b>Data tidak ditemukan</b>Coba kata kunci lain atau tambahkan alat baru.</div></td></tr>';
+    $('alatRows').querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openToolModal(b.dataset.edit)));
+    $('alatRows').querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteTool(b.dataset.delete)));
+  }
+  function renderLoanOptions(){
+    const available=data.tools.filter(t=>t.available>0);const select=$('toolSelect');const old=select.value;
+    select.innerHTML='<option value="">Pilih alat yang tersedia</option>'+available.map(t=>`<option value="${t.id}">${escapeHTML(t.name)} — tersedia ${t.available}</option>`).join('');
+    if(available.some(t=>t.id===old))select.value=old;
+    $('loanQty').max=select.value?(getTool(select.value)?.available||1):1;
+  }
+  $('toolSelect').addEventListener('change',()=>{$('loanQty').max=getTool($('toolSelect').value)?.available||1;});
+  function renderTransactions(){
+    const q=$('searchTransaksi').value.toLowerCase(),filter=$('filterTransaksi').value;
+    const list=[...data.transactions].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')).filter(tx=>{
+      const status=statusOf(tx);return (tx.borrower+' '+tx.toolName+' '+(tx.identity||'')).toLowerCase().includes(q)&&(filter==='all'||(filter==='active'&&status==='active')||(filter==='late'&&status==='late')||(filter==='done'&&status==='done'));
+    });
+    $('transactionRows').innerHTML=list.length?list.map(tx=>`<tr><td><b>${escapeHTML(tx.borrower)}</b><div class="muted">${escapeHTML(tx.identity||'-')}</div></td><td>${escapeHTML(tx.toolName)}</td><td>${tx.qty} unit</td><td>${fmt(tx.loanDate)}</td><td>${fmt(tx.dueDate)}</td><td>${statusPill(statusOf(tx))}</td><td>${tx.returnedAt?`<span class="muted">${fmt(tx.returnedAt)}</span>`:`<button class="btn btn-primary btn-small" data-return="${tx.id}">Kembalikan</button>`}</td></tr>`).join(''):'<tr><td colspan="7"><div class="empty"><b>Tidak ada transaksi</b>Data peminjaman akan tampil di sini.</div></td></tr>';
+    $('transactionRows').querySelectorAll('[data-return]').forEach(b=>b.addEventListener('click',()=>openReturnModal(b.dataset.return)));
+  }
+  function renderReport(){
+    const txs=[...data.transactions].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+    $('reportTotal').textContent=txs.length;$('reportDone').textContent=txs.filter(t=>statusOf(t)==='done').length;$('reportActive').textContent=txs.filter(t=>statusOf(t)==='active').length;$('reportLate').textContent=txs.filter(t=>statusOf(t)==='late').length;
+    $('reportRows').innerHTML=txs.length?txs.map((tx,i)=>`<tr><td>${i+1}</td><td><b>${escapeHTML(tx.borrower)}</b></td><td>${escapeHTML(tx.identity||'-')}</td><td>${escapeHTML(tx.toolName)}</td><td>${tx.qty}</td><td>${fmt(tx.loanDate)}</td><td>${fmt(tx.returnedAt)}</td><td>${statusPill(statusOf(tx))}</td></tr>`).join(''):'<tr><td colspan="8"><div class="empty"><b>Belum ada laporan</b>Data akan tercatat setelah ada peminjaman.</div></td></tr>';
+  }
+  function renderAll(){renderDashboard();renderTools();renderTransactions();renderReport();renderLoanOptions();}
+
+  function openToolModal(id){
+    $('toolForm').reset();$('editToolId').value='';$('modalTitle').textContent=id?'Edit Data Alat':'Tambah Data Alat';
+    if(id){const t=getTool(id);if(!t)return;$('editToolId').value=t.id;$('toolName').value=t.name;$('toolCategory').value=t.category;$('toolQty').value=t.total;}
+    $('toolModal').classList.add('show');
+  }
+  function closeToolModal(){$('toolModal').classList.remove('show');}
+  $('addToolBtn').addEventListener('click',()=>openToolModal());$('closeModal').addEventListener('click',closeToolModal);$('cancelModal').addEventListener('click',closeToolModal);
+  $('toolModal').addEventListener('click',e=>{if(e.target===$('toolModal'))closeToolModal();});
+  $('toolForm').addEventListener('submit',e=>{
+    e.preventDefault();const id=$('editToolId').value,name=$('toolName').value.trim(),category=$('toolCategory').value,total=Number($('toolQty').value);
+    if(!name||!Number.isInteger(total)||total<0)return notify('Periksa kembali nama dan jumlah alat.');
+    if(id){const t=getTool(id),borrowed=t.total-t.available;if(total<borrowed)return notify('Jumlah total tidak boleh kurang dari unit yang sedang dipinjam.');t.name=name;t.category=category;t.total=total;t.available=total-borrowed;}
+    else{data.tools.push({id:'A'+Date.now().toString().slice(-7),name,category,total,available:total});}
+    save();closeToolModal();renderAll();notify(id?'Data alat berhasil diperbarui.':'Alat baru berhasil ditambahkan.');
+  });
+  function deleteTool(id){const t=getTool(id);if(!t)return;const hasActive=data.transactions.some(tx=>tx.toolId===id&&!tx.returnedAt);if(hasActive)return notify('Alat tidak dapat dihapus karena masih dipinjam.');if(confirm(`Hapus data ${t.name}?`)){data.tools=data.tools.filter(x=>x.id!==id);save();renderAll();notify('Data alat berhasil dihapus.');}}
+
+  $('loanDate').value=todayISO();$('dueDate').value=addDays(todayISO(),7);$('loanDate').min='';$('dueDate').min=todayISO();
+  $('loanDate').addEventListener('change',()=>{$('dueDate').min=$('loanDate').value||todayISO();if($('dueDate').value<$('loanDate').value)$('dueDate').value=$('loanDate').value;});
+  $('loanForm').addEventListener('reset',()=>setTimeout(()=>{$('loanDate').value=todayISO();$('dueDate').value=addDays(todayISO(),7);renderLoanOptions();},0));
+  $('loanForm').addEventListener('submit',e=>{
+    e.preventDefault();const borrower=$('borrower').value.trim(),identity=$('identity').value.trim(),tool=getTool($('toolSelect').value),qty=Number($('loanQty').value),loanDate=$('loanDate').value,dueDate=$('dueDate').value;
+    if(!borrower||!tool)return notify('Nama peminjam dan alat wajib diisi.');
+    if(!Number.isInteger(qty)||qty<1||qty>tool.available)return notify('Jumlah pinjaman melebihi stok yang tersedia.');
+    if(!loanDate||!dueDate||dueDate<loanDate)return notify('Tanggal pengembalian harus sama atau setelah tanggal pinjam.');
+    const tx={id:'T'+Date.now(),borrower,identity,toolId:tool.id,toolName:tool.name,qty,loanDate,dueDate,note:$('loanNote').value.trim(),createdAt:new Date().toISOString(),returnedAt:null};
+    tool.available-=qty;data.transactions.push(tx);save();$('loanForm').reset();renderAll();notify('Peminjaman berhasil dicatat.');showPage('transaksi');
+  });
+
+  function openReturnModal(id){const tx=data.transactions.find(t=>t.id===id);if(!tx)return;selectedReturnId=id;$('returnDescription').textContent=`Konfirmasi bahwa ${tx.borrower} mengembalikan ${tx.qty} unit ${tx.toolName}. Setelah dikonfirmasi, stok alat akan bertambah kembali.`;$('returnModal').classList.add('show');}
+  function closeReturnModal(){$('returnModal').classList.remove('show');selectedReturnId=null;}
+  $('closeReturnModal').addEventListener('click',closeReturnModal);$('cancelReturn').addEventListener('click',closeReturnModal);$('returnModal').addEventListener('click',e=>{if(e.target===$('returnModal'))closeReturnModal();});
+  $('confirmReturn').addEventListener('click',()=>{const tx=data.transactions.find(t=>t.id===selectedReturnId);if(!tx||tx.returnedAt)return closeReturnModal();const tool=getTool(tx.toolId);if(tool)tool.available=Math.min(tool.total,tool.available+tx.qty);tx.returnedAt=todayISO();save();closeReturnModal();renderAll();notify('Pengembalian berhasil dicatat.');});
+
+  function exportCSV(){
+    if(!data.transactions.length)return notify('Belum ada transaksi untuk diunduh.');
+    const rows=[['No','Nama Peminjam','Kelas/NIS/NIP','Nama Alat','Jumlah','Tanggal Pinjam','Batas Pengembalian','Tanggal Dikembalikan','Status','Keterangan'],...data.transactions.map((tx,i)=>[i+1,tx.borrower,tx.identity||'',tx.toolName,tx.qty,tx.loanDate,tx.dueDate,tx.returnedAt||'',statusOf(tx)==='done'?'Selesai':statusOf(tx)==='late'?'Terlambat':'Dipinjam',tx.note||''])];
+    const csv='\uFEFF'+rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='laporan-peminjaman-bengkel-ti.csv';a.click();URL.revokeObjectURL(url);notify('Laporan CSV berhasil diunduh.');
+  }
+  $('exportBtn').addEventListener('click',exportCSV);$('searchAlat').addEventListener('input',renderTools);$('filterAlat').addEventListener('change',renderTools);$('searchTransaksi').addEventListener('input',renderTransactions);$('filterTransaksi').addEventListener('change',renderTransactions);$('refreshTransaksi').addEventListener('click',()=>{renderAll();notify('Data transaksi diperbarui.');});
+  $('todayText').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  save();renderAll();
+})();
+</script>
+</body>
+</html>
